@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Architecture</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+<div id="content">
+<div class="sect1">
+<h2 id="_architecture">Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The notebook implementation used is the Jupyter notebook.
+The notebooks are run inside a JupyterHub, and are by default set to a Jupyter Lab environment.
+The notebooks are contained within a Docker container based on <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/">the Jupyter datascience notebook</a>, that connects to the underlying system through the Jupyter SystemUserSpawner.
+This allows for persisent users, whilst giving users the option to modify their container during their session, for example, to install additional package (sudo access in the container is possible).
+It is also possible to access the virtual machine directly using ssh, but using notebooks is preferred, since this makes consistency, sharing of code and provenance generally easier.</p>
+</div>
+<div class="paragraph">
+<p>One of the main uses of Jupyter is in data analysis, since it includes output, including visualisations, directly in the notebook.
+In addition, Python is widely used in the sciences for analysis, and nowadays a wide variety of packages (libraries) exist to help with that.</p>
+</div>
+<div class="paragraph">
+<p>Note that, while the Jupyter notebook comes from the Python world and is largely programmed in Python (with JavaScript at the user interface side), it allows a variety of "kernels" to run in the notebooks.
+This includes kernels for R and Julia.
+In all cases, the notebook simply functions as an mediator, passing input from the user to the relevant interpreter or compiler behind the scenes, and output from the interpreter or compiler back to the user.</p>
+</div>
+<div class="paragraph">
+<p>The widespread use of the Jupyter notebook should help with its usage: many users may not have to learn a new interface, or they may easily find help (either from (local) colleagues or on the internet) with its use.</p>
+</div>
+<div class="sect2">
+<h3 id="_lab_environment">Lab environment</h3>
+<div class="paragraph">
+<p>Over the past years, the Jupyter notebook environment has been extended to include a shell environment with a command line and a text editor (still running in a web browser), and the option to start multiple sessions and kernels (e.g., Python 2, Python 3, R, Julia) all from the same session.
+This is now called <a href="http://jupyterlab.readthedocs.io/en/latest/">JupyterLab</a>.</p>
+</div>
+<div class="paragraph">
+<p>Like the notebook, JupyterLab can be run locally (<code>python -m jupyter lab</code> from the command line), or, for the case here, remotely; in both cases, a web browser acts as the environment that the user will use.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jupyterhub">JupyterHub</h3>
+<div class="paragraph">
+<p>The JupyterHub is a system where multiple users can start a notebook (or lab) on the same server: each notebook is separate from the other notebooks.
+JupyterHub is the underlying system for remote use of Jupyter notebooks / labs.</p>
+</div>
+<div class="paragraph">
+<p>The hub has a login system, which in our case is directly connected to the underlying system logins and accounts.
+This allows for ssh access to exactly the same system as through JupyterHub.
+This match also allows for standard sharing of data between users (with group and world permissions).</p>
+</div>
+<div class="sect3">
+<h4 id="_long_running_jobs">Long-running jobs</h4>
+<div class="paragraph">
+<p>Note that it is entirely possible to run long-running jobs from the JupyterLab environment, avoiding the need for ssh login.
+Provisions need to be taken that a (compute) job is detached (e.g. with <code>nohup</code>, <code>disown</code> commands) and output (<code>stdout</code>, <code>stderr</code>) is directed into files.
+With those provisions, a user can login, start a job with in the Lab terminal, log out, log in elsewhere and find the results.
+This is <strong>not</strong> possible with purely the notebook: logging out (or simply closing the browser tab) removes the connection between the server and the output (the notebook cell), and while a job will complete, it does not know where to send its output (since the notebook cell has gone).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data_server">Data server</h3>
+<div class="paragraph">
+<p>The stored data is served through a THREDDS server.
+Some newly created datasets may be stored there as well, for re-use by other users.</p>
+</div>
+<div class="paragraph">
+<p>Data stored would be</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Standard datasets</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CMIP5 (total amount: 126 TB)</p>
+</li>
+<li>
+<p>Euro-Cordex (total amount: 44 TB)</p>
+</li>
+<li>
+<p>Other?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Derived data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Possible (re)shared within the project through the same server</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Scratch data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Generic scratch area for users, with a fair-use policy.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is 100 TB available (currently 40 TB), so there will need to be prioritisation what sections of the data need to be available (e.g., specific time intervals and variables for CMIP5).
+There will also be a tradeoff between standard datasets, derived data (which is expected to grow during the project) and scratch data available.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_possible_scaling_issues">Possible scaling issues</h3>
+<div class="paragraph">
+<p>A VM in the cloud may not scale well: cores or memory are hard to adjust while the machine is running.
+It is possible to start a new VM if computation demand is high (automatically, through a scripting interface), but this is something that hasn&#8217;t been explored yet.</p>
+</div>
+<div class="sect3">
+<h4 id="_kubernetes_use">Kubernetes use</h4>
+<div class="paragraph">
+<p>A standard alternative, used by various cloud providers, is to run Kubernetes.
+Kubernetes scales well for additional compute resources (using so-called pods to run processes in), but it may not work well with large amount of data (50-100 TB) that needs to be readily available.
+It also makes it much harder to directly log in to a system (pod) through ssh.
+Lastly, it is unclear how easy it is to deploy Kubernetes on the cloud system at SURF-Sara; this is something to find out if VMs prove to not be workable.</p>
+</div>
+<div class="paragraph">
+<p>The convenient thing about working with Kubernetes is that there are already various deployments around that can be used right now: Pangeo-data is one of the better-known (see also the list at the end of this document).
+Note that Kubernetes appears to focus more on scaling computational-wise (allowing compute-intensive jobs to run in new pods created on the fly), but it is, again, unclear how it would deal with large amount of directly accessible data.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-14 17:18:01 +0200
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Pros and cons of notebooks and the Binderhub structure</title>
+<style>
+/* JupyterHub style, adjusted with the EUCP style, which uses a Bootstrap theme
+Adjustments have only been made to visible items to match color, fonts and such */
+
+body {
+  background-color: #ffffff;
+  font-family: Raleway, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #666666;
+  max-width: 960px;
+  margin: auto;
+  padding-left: 2em;
+  padding-right: 2em;
+  line-height: 150%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  color: #555555;
+}
+
+a {
+  color: #1d477c;
+  text-decoration: none;
+}
+
+ul {
+  padding-left: 1em;
+}
+
+ul ul {
+  list-style: none;
+  line-height: 90%;
+}
+
+ul ul p {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.btn-jupyter {
+  color: #fff;
+  background-color: #3498DB;
+  border-color: #26578F
+}
+.btn-jupyter.focus, .btn-jupyter: focus {
+  color: #fff;
+  background-color: #64afdd;
+  border-color: #76270f
+}
+.btn-jupyter: hover {
+  color: #fff;
+  background-color: #64afdd;
+  border-color: #5299cb
+}
+.btn-jupyter.active, .btn-jupyter: active, .open > .dropdown-toggle.btn-jupyter {
+  color: #fff;
+  background-color: #64afdd;
+  background-image: none;
+  border-color: #5299cb
+}
+.btn-jupyter.active.focus, .btn-jupyter.active: focus, .btn-jupyter.active: hover, .btn-jupyter: active.focus, .btn-jupyter: active: focus, .btn-jupyter: active: hover, .open > .dropdown-toggle.btn-jupyter.focus, .open > .dropdown-toggle.btn-jupyter: focus, .open > .dropdown-toggle.btn-jupyter: hover{color: #fff;
+  background-color: #64afdd;
+  border-color: #76270f
+}
+.btn-jupyter.disabled.focus, .btn-jupyter.disabled: focus, .btn-jupyter.disabled: hover, .btn-jupyter[disabled].focus, .btn-jupyter[disabled]: focus, .btn-jupyter[disabled]: hover, fieldset[disabled] .btn-jupyter.focus, fieldset[disabled] .btn-jupyter: focus, fieldset[disabled] .btn-jupyter: hover {
+  background-color: #3498DB;
+  border-color: #26578F
+}
+.btn-jupyter .badge {
+  color: #3498DB;
+  background-color: #fff
+}
+.jpy-logo {
+  height: 28px;
+  margin-top: 6px
+}
+#header {
+  border-bottom: 1px solid #e7e7e7
+}
+.hidden {
+  display: none
+}
+#progress-log {
+  margin-top: 8px
+}
+.progress-log-event {
+  border-top: 1px solid #e7e7e7;
+  padding: 8px
+}
+i.sort-icon {
+  margin-left: 4px
+}
+div.error {
+  margin: 2em;
+  text-align: center
+}
+div.ajax-error {
+  padding: 1em;
+  text-align: center;
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1
+}
+div.ajax-error hr {
+  border-top-color: #e4b9c0
+}
+div.ajax-error .alert-link {
+  color: #843534
+}
+div.error > h1 {
+  font-size: 300%;
+  line-height: normal
+}
+div.error > p {
+  font-size: 200%;
+  line-height: normal
+}
+#login-main {
+  display: table;
+  height: 80vh
+}
+#login-main #insecure-login-warning {
+  background-color: #fcf8e3;
+  padding: 10px
+}
+a#login-main #insecure-login-warning: focus, a#login-main #insecure-login-warning: hover {
+  background-color: #f7ecb5
+}
+#login-main .service-login {
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  margin: auto auto 20% auto
+}
+#login-main form {
+  display: table-cell;
+  vertical-align: middle;
+  margin: auto auto 20% auto;
+  width: 350px;
+  font-size: large
+}
+#login-main .input-group, #login-main button, #login-main input[type=text] {
+  width: 100%
+}
+#login-main input[type=submit] {
+  margin-top: 16px
+}
+#login-main .form-control: focus, #login-main input[type=submit]: focus {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #3498DB;
+  border-color: #3498DB;
+  outline-color: #3498DB
+}
+#login-main .login_error {
+  color: #ff4500;
+  font-weight: 700;
+  text-align: center
+}
+#login-main .auth-form-header {
+  padding: 10px 20px;
+  color: #fff;
+  background: #3498DB;
+  border-radius: 3px 3px 0 0
+}
+#login-main .auth-form-body {
+  padding: 20px;
+  font-size: 14px;
+  border: thin silver solid;
+  border-top: none;
+  border-radius: 0 0 3px 3px
+}
+
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>Pros and cons of notebooks and the Binderhub structure</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_advantages">Advantages</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_notebooks">Notebooks</h3>
+<div class="paragraph">
+<p>Notebooks, in particular the Jupyter notebooks, are nowadays common.
+Thus, they provide a familiar interface to a set of users, with lots of additional information to be found.</p>
+</div>
+<div class="paragraph">
+<p>Notebooks are also easier to share, in particular to demonstrate something or use for show cases.</p>
+</div>
+<div class="paragraph">
+<p>The JupyterLab extension provides an interface that gets close to an IDE or virtual machine, including shell access.
+This should feel very familiar to the majority of users: an editor and terminal are familiar to a large set of users.
+In addition, there is the possibility to have one or more notebooks open for experimentation.</p>
+</div>
+<div class="paragraph">
+<p>Development for the notebooks is still ongoing (thanks to their popularity).
+While this is not particular tied to notebooks, it potentially allows for rapid fixes of the notebook or the infrastructure surrounding it.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_binderhub_infrastructure">BinderHub infrastructure</h3>
+<div class="paragraph">
+<p>BinderHub is the system that runs Jupyter notebooks or labs for a multitude of users, each with their own specific container.</p>
+</div>
+<div class="paragraph">
+<p>The BinderHub infrastructure makes uses of Docker containers, and often runs on Kubernetes.
+Both are tested and tried,  and common pieces of infrastructure, making it straightforward to deploy BinderHub.
+Documentation is also geared towards this setup, and makes it even easier to deploy BinderHub.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_disadvantages_and_caveats">Disadvantages and caveats</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_notebooks_2">Notebooks</h3>
+<div class="paragraph">
+<p>Notebooks are not ideal for every situation.
+In particular, cells can be executed out of order, causing state problems later in the notebook, which may impede reproducibility.
+Tools are (slowly) being developed to help avoid this issue, but it is largely in the developer&#8217;s and user&#8217;s hands to use a notebook in order.
+"Plain" programs (programs and scripts executed directly on the command line) do not have this issue.</p>
+</div>
+<div class="paragraph">
+<p>Notebooks are not ideal for writing (and using) larger pieces of code that need to stick together, such as classes with several methods: such a class would have to be written inside one (large) cell.
+Such pieces of code should be moved into their own module or package, and imported in the notebook.
+This could be done using the binder system, where local code in a repository are added in addition to generic libraries and packages.
+This, however, requires user&#8217;s expertise which may not be available, or an effort that users may not be willing to make.</p>
+</div>
+<div class="paragraph">
+<p>If the notebook interface is closed (that is, the browser page is closed), execution of a currently running cell will still continue, but the output will not be available; even when re-attaching to the notebook.
+Thus, users have to learn to save all outputs from longer running task to a file in the container image (not to their local disk), and retrieve that later.
+While this is similar to running a long-running job on, for example, a specialized cluster or high-performance machine, it may be somewhat unexpected in a notebook, where output is usually directly in the notebook.</p>
+</div>
+<div class="paragraph">
+<p>For the above scenarios, using a plain program in a notebook Lab environment may be better: this program could be edited online (with the caveat that this editor is likely far from a user&#8217;s favorite editor), and run on the command line provided by the lab terminal.
+A Lab environment may also allow to combine several scripts in, for example, a bash script, so that a set of simple, task-specific, scripts can be run in a chain on the command line.
+Since notebooks have not been set out for this task, it remains yet to be seen how well this workflow really works.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_binderhub_infrastructure_2">BinderHub infrastructure</h3>
+<div class="paragraph">
+<p>Using a Docker container for each user and notebook poses extra strains on the system, mostly in terms of disk space: each container is essentially a full-blown operating system, with a multitude of packages installed.
+Disk space is relatively cheap, so this may not be a problem, but it may be something to consider.</p>
+</div>
+<div class="paragraph">
+<p>Kubernetes Pods make communication perhaps safer, but also more difficult.
+This holds in particular for file sharing: if this has to be done over http protocols, this may be slow and cumbersome.
+A direct (NFS) file system share may be a lot easier and quicker to set up and maintain.
+Therefore, it may be easier, and more practical, to run BinderHub on a single (virtual) machine: it would then fire off containers that connect to the local machine for data access and sharing.
+This bypasses the Kubernetes infrastructure, but since the default BinderHub uses this by default, it requires some work-arounds.
+The bits and pieces of BinderHub can be used, but may have to be reconnected in a different way.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2018-12-07 13:25:36 +0100
+</div>
+</div>
+</body>
+</html>

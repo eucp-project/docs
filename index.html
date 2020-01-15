@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Overview of the EUCP JupyterHub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+<div id="content">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_overview_of_the_eucp_jupyterhub">Overview of the EUCP JupyterHub</a></p>
+</li>
+<li>
+<p><a href="tutorial/index.html">Tutorial for JupyterLab</a></p>
+</li>
+<li>
+<p><a href="examples/index.html">Some practical notebook examples</a></p>
+</li>
+<li>
+<p><a href="architecture.html">Overview of the architecture used</a></p>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_overview_of_the_eucp_jupyterhub">Overview of the EUCP JupyterHub</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The EUCP JupyterHub is based directly on the standard JupyterHub architecture: it runs the JupyterHub server, proxied through the Nginx webserver.
+The Nginx webserver also proxies (and password protects) the THREDDS server, and serves these help pages.</p>
+</div>
+<div class="paragraph">
+<p>The user environment chosen for the JupyterHub is not the default Jupyter notebook, but the JupyterLab setup.
+This all runs directly in your webbrowser.
+JupyterLab includes the default notebooks (and one can revert to this layout if so wanted), but makes navigating files and folders hopefully easier.
+A terminal interface is also included, which allows access to other utilities; this may be shell (bash) tools, the GNU Fortran compiler or the CDO utilities.
+(Note for Safari users: a bug results in black font on a black background when using the terminal, making it unusable. This is known and the first new JupyterHub release will fix this. For now, the best work-around is to use a different browser.)</p>
+</div>
+<div class="paragraph">
+<p>The JupyterHub runs a Docker container for each logged-in user.
+This separates the current user completely from other users and the system (but see below)
+This container is derived from the standard Jupyter datascience notebooks, which can run Python 3, R or Julia, and have a suite of (default) packages installed for these languages.
+For Python, we have extended the list of packages with a set suitable for climate analysis.</p>
+</div>
+<div class="paragraph">
+<p>In addition, the container provides command-line utilities used in climate science.
+The latter are often added to make transitioning to, for example, a complete Python script easier: this aims to make the resulting analysis scripts and notebooks more transparent to other users (once published) and more portable to other machines and architectures (Python, but also R and Julia, support a wide variety of architectures).</p>
+</div>
+<div class="sect2">
+<h3 id="_logging_in_sessions_and_kernels">Logging in, sessions and kernels</h3>
+<div class="paragraph">
+<p>If you log in through the default webpage login, your session remains saved behind the scenes.
+If you quit your browser or close the tab, a next time you navigate to the JupyterHub, you don&#8217;t need to log in again: you are still logged in.
+This doesn&#8217;t work across browsers or private sessions (that is, it relies on cookies), so this may be something to be aware of if you don&#8217;t want others to be able to access your work.
+There is an explicit log-out option: navigate to <code>File &#8594; Log Out</code>.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, you may need to restart your Jupyter server. This can be done explicitly by going to the "control hub" (<code>File &#8594; Hub Control Panel</code>).
+From the control hub, you can stop your current server, then restart it again.
+This won&#8217;t affect your (saved) files at all: it only affects running notebooks (they will be interrupted), but the full session will still be there.
+Navigate back through <code>My Server</code>.</p>
+</div>
+<div class="paragraph">
+<p>A server restart is sometimes necessary if, after logging in, the JupyterLab interface doesn&#8217;t appear.
+JupyterHub will normally inform you, and suggest to restart the server (by stopping and then starting it).
+This may happen if there have been some changes on the hosting machine or to the Docker container (such as additional packages).</p>
+</div>
+<div class="sect3">
+<h4 id="_sessions">Sessions</h4>
+<div class="paragraph">
+<p>Even if you explicitly log out (or just close the browser tab), your session will remain running on the hosting machine (inside the Docker container).
+This is useful for long-running jobs: they can continue over the weekend, for example.</p>
+</div>
+<div class="paragraph">
+<p>Be aware that, when running a job (cell) in a notebook and you log out, the output may be lost.
+In particular, output that would be sent to an output cell, will be lost.
+The solution is to assign the output to a variable.
+Once the job (cell) is finished, and you are logged back in, printing the variable by itself will contain the output.
+(Alternatively, you can save the output to a file, but I personally prefer keeping it around in a variable: I often have to use the data again, and with a variable, it is immediately accessible.)</p>
+</div>
+<div class="paragraph">
+<p>The same holds for running something in the terminal: make sure you redirect your output to a file to save the output.</p>
+</div>
+<div class="paragraph">
+<p>Note that, when logging back in, a cell may still indicate it is active (with the <code>[*]</code> in front of it): this may not have to be the case, so try outputting the variable with the saved results in a new cell (e.g., directly below the running cell): if you get a result, the active cell is actually ready, and it&#8217;s state indicator has become stale.</p>
+</div>
+<div class="paragraph">
+<p>This is all very similar (effectively the same) as logging in via ssh to a machine, starting a job, putting it in the background (probably with <code>disown</code> as well) and then existing that machine: the output would be lost there as well, if it&#8217;s not redirected.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kernels">Kernels</h4>
+<div class="paragraph">
+<p>Each session can run multiple "kernels".
+A kernel here is simply an instance of a notebook or terminal, and under the hood this means, for example, a separate Python process (for each notebook opened).
+A kernel can be restarted (<code>Kernel &#8594; Restart kernel&#8230;&#8203;</code>): this will not affect any other notebooks running, so this is safe to do for a specific notebook; it can be useful if the current notebook is somehow in a state that makes it hard to continue (for example, plot settings have changed due to going back and forth between individual cells).
+Restarting a kernel will cause all imports, variable settings, functions definitions etc. for the notebook to be reset as well: it provides a completely new Python/R/Julia environment.</p>
+</div>
+<div class="paragraph">
+<p>If you installed a package yourself, you will need to restart the kernel for the package to be found.
+Note that self-installed packages will disappear if the Jupyter server itself is restarted.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_access_to_data_and_other_users_directories">Access to data and other users directories</h3>
+<div class="paragraph">
+<p>A Docker container completely separates its contents (and logged-in user) from the environment it runs in, as a separate machine.
+For practical reasons, it is possible to provide "mount points" to directories on the hosting machine.
+In this case, there are two such mount points provided, visible as directories: <code>_data</code> and <code>_users</code>.</p>
+</div>
+<div class="paragraph">
+<p>The first directory, <code>_data</code>, leads directly to the data hosted on the system that is also served by the THREDDS server.
+This provides another way (than using the THREDDS server) to read the data.
+Some subdirectories are only accessible depending on user&#8217;s the work package: the system uses Unix-style group access to restrict access to data directories that are specific to certain work packages.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, the <code>_users</code> directory points to the base home directory of all users on the system.
+Again, access restrictions based on group access (work packages and institutions) are in place.
+If you find anything incorrect with the access restrictions, please let us know at <a href="mailto:e.rol@esciencecenter.nl">e.rol@esciencecenter.nl</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_parallel_and_asynchronous_tasks">Parallel and asynchronous tasks</h3>
+<div class="paragraph">
+<p>Running tasks in parallel or asynchronous is possible, to a certain point.
+For Python, a package like <code>dask</code> is installed, which can make this very intuitive.</p>
+</div>
+<div class="paragraph">
+<p>However, the system does not automatically scale with changing load: if a task is run on all its cores, other processes (including other users) will suffer.</p>
+</div>
+<div class="paragraph">
+<p>We can&#8217;t, at the moment, support something like Pangeo does (Pangeo also uses a JupyterHub in the cloud, built on top of Kubernetes), where a compute-intensive tasks is spun off in its own container, and returns when its ready, removing the container (and CPU requirements) as well.</p>
+</div>
+<div class="paragraph">
+<p>The reason for this is that our hosting platform, the SURFSara HPC Cloud, unfortunately does not support Kubernetes.
+Without that, it is very hard to easily scale the number of requires (CPU) resources up or down.
+(Pangeo, for example, uses the Kubernetes architecture under the hood for its scaling.)</p>
+</div>
+<div class="paragraph">
+<p>It is possible that this will be supported in the future (in which case we may transition to Pangeo), but this requires quite some work to set this up on our current hosting platform.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_list_of_python_packages_and_command_line_utilities_installed">list of Python packages and command-line utilities installed</h3>
+<div class="paragraph">
+<p>All packages are for Python 3.7.3.</p>
+</div>
+<div class="paragraph">
+<p>You can install packages yourself using pip (<code>pip install &lt;package&gt;</code>) or conda (<code>conda install &lt;package&gt;</code>); there is no <code>sudo</code> or <code>--user</code> option needed.</p>
+</div>
+<div class="paragraph">
+<p>You can get a full list of Python packages in the terminal interface, with <code>pip list</code>. Below is a selected list:</p>
+</div>
+<div id="python-packages" class="ulist">
+<ul>
+<li>
+<p>Standard scientific packages</p>
+<div class="ulist">
+<ul>
+<li>
+<p>numpy 1.15.4</p>
+</li>
+<li>
+<p>scipy 1.2.1</p>
+</li>
+<li>
+<p>pandas 0.24.2</p>
+</li>
+<li>
+<p>scikit-learn 0.20.3</p>
+</li>
+<li>
+<p>scikit-image 0.14.3</p>
+</li>
+<li>
+<p>statsmodels 0.9.0</p>
+</li>
+<li>
+<p>Cython 0.29.12</p>
+</li>
+<li>
+<p>sympy 1.3</p>
+</li>
+<li>
+<p>numba 0.42.1</p>
+</li>
+<li>
+<p>numexpr 2.6.9</p>
+</li>
+<li>
+<p>dask 1.1.5</p>
+</li>
+<li>
+<p>Pillow 6.1.0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Plotting</p>
+<div class="ulist">
+<ul>
+<li>
+<p>matplotlib 2.2.4</p>
+</li>
+<li>
+<p>seaborn 0.9.0</p>
+</li>
+<li>
+<p>Cartopy 0.17.0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Climate analysis packages</p>
+<div class="ulist">
+<ul>
+<li>
+<p>xarray 0.10.7</p>
+</li>
+<li>
+<p>pyproj 2.2.1</p>
+</li>
+<li>
+<p>scitools-iris 2.2.1dev0</p>
+</li>
+<li>
+<p>cf-units 2.1.3  (used by iris)</p>
+</li>
+<li>
+<p>cfunits 3.1.1 (used by cf/cf-plot)</p>
+</li>
+<li>
+<p>cfdm 1.7.7</p>
+</li>
+<li>
+<p>cf-python 3.0.0b5</p>
+</li>
+<li>
+<p>cf-plot 2.4.10 (unsupported; best attempt at conversion</p>
+</li>
+<li>
+<p>cftime 1.0.3.4</p>
+</li>
+<li>
+<p>eofs 1.4.0</p>
+</li>
+<li>
+<p>cdo 1.5.3 (Python interface to CDO)</p>
+</li>
+<li>
+<p>CMOR 3.5.0</p>
+</li>
+<li>
+<p>ESMPy 7.1.0dev0</p>
+</li>
+<li>
+<p>ESMValCore 2.0.0b0</p>
+</li>
+<li>
+<p>GDAL 2.4.2 (Python interface to libgdal)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Data formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>netCDF4</p>
+</li>
+<li>
+<p>h5py 2.9.0</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Other</p>
+<div class="ulist">
+<ul>
+<li>
+<p>SQLAlchemy 1.3.5</p>
+</li>
+<li>
+<p>requests 2.22.0</p>
+</li>
+<li>
+<p>beautifulsoup4 4.7.1</p>
+</li>
+<li>
+<p>yamale 1.7.0</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_command_line_tools">Command line tools</h4>
+<div class="paragraph">
+<p>Be aware that there is no X-windows or other window interface; all utilites have to be run without displaying windows or images.</p>
+</div>
+<div id="cmdline-utilities" class="ulist">
+<ul>
+<li>
+<p>Generic utilities</p>
+<div class="ulist">
+<ul>
+<li>
+<p>bash 4.4.20</p>
+</li>
+<li>
+<p>zsh 5.4.2</p>
+</li>
+<li>
+<p>tcsh 6.20.0</p>
+</li>
+<li>
+<p>perl 5.26.1</p>
+</li>
+<li>
+<p>python 3.7.3</p>
+</li>
+<li>
+<p>git 2.17.1</p>
+</li>
+<li>
+<p>TeXLive 2017</p>
+</li>
+<li>
+<p>gnuplot 5.2</p>
+</li>
+<li>
+<p>imagemagick 6.9.7-4</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Climate science utilities</p>
+<div class="ulist">
+<ul>
+<li>
+<p>cdo 1.9.6</p>
+</li>
+<li>
+<p>grads 2.2.0</p>
+</li>
+<li>
+<p>ncl 6.4.0</p>
+</li>
+<li>
+<p>pcraster 4.1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Compilers and tools</p>
+<div class="ulist">
+<ul>
+<li>
+<p>gcc / g++ / gfortran 7.4.0</p>
+</li>
+<li>
+<p>cmake 3.10.2</p>
+</li>
+<li>
+<p>make 4.2.1</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-23 11:56:49 +0200
+</div>
+</div>
+</body>
+</html>

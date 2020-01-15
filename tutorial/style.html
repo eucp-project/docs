@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Good notebook style</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+</div>
+<div id="content">
+<div class="paragraph">
+<p>These are some guidelines to make your notebooks more manageable and readable (by yourself and others).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Split your cells by code topic.
+For example, defining constants could be done in a single cell. And plotting a figure in another separate cell.
+In most cases, a single cell would correspond to a single function.</p>
+</li>
+<li>
+<p>Import statements usually go at the top.
+You may want to make exceptions for some cells, for example a cell plotting a figure, where you import the plotting packages only in that cell.
+In that way, the plotting imports don&#8217;t extend and pollute the other import statements, and, if the plot is not run, no essential imports are lost.</p>
+</li>
+<li>
+<p>If you want to time execution of a piece of code, use one of the following magic commands instead of coding your own timers:</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">%%time</dt>
+<dd>
+<p>  Times the execution of the whole cell.
+Put this magic command at the top of the cell.</p>
+</dd>
+<dt class="hdlist1">%time</dt>
+<dd>
+<p>  Times the execution of the line following it.
+For example, <code>%time 2**128</code>.</p>
+</dd>
+<dt class="hdlist1">%timeit</dt>
+<dd>
+<p>  Times the execution of the line following it, to benchmark it.
+This runs the line multiple times (in contrast to <code>%time</code>), and reports the average of the fastest results.
+<code>%time</code> also has a cell variant <code>%%timeit</code>.
+For more details, see the <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-time"><code>%time</code> and <code>%timeit</code> documentation</a>.</p>
+</dd>
+</dl>
+</div>
+</li>
+<li>
+<p>Use standard Python (or Julia, or R) style.
+For Python, see <a href="https://www.python.org/dev/peps/pep-0008">PEP 8</a> (Python Enhancement Proposal).
+A very brief summary:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Put whitespace around comma&#8217;s and operators (<code>=</code>, <code>+</code>, <code>&gt;</code> etc).
+I personally only don&#8217;t do this inside array indices, e.g. <code>myarray[1:3,4:10]</code>.</p>
+</li>
+<li>
+<p>Use four space indentation.
+Do not use tabs (most Python-aware editors will automatically convert &lt;tab&gt; to four spaces).</p>
+</li>
+<li>
+<p>Use lowercase variables, possibly with underscores to separate word_parts.</p>
+</li>
+<li>
+<p>Avoid importing everything from a package.
+That is, do not do something like <code>from numpy import *</code>.
+This can overwrite variables and functions defined or imported earlier, without noticing.
+Instead, keep the namespace, and possibly use some (established) abbreviations.
+For example, the following imports are fairly default:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import pandas as pd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and then use <code>a = np.zeros(10)</code> and the like in your code.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-14 17:18:01 +0200
+</div>
+</div>
+</body>
+</html>

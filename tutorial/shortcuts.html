@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Jupyter Lab keyboard shortcuts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a number of keyboard shortcuts which can make life easier, instead of having to hunt down the correct menu item.
+Note that you have to be in command mode for most of these to work; hit escape to ensure you&#8217;re in command mode.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Shift-enter (also works in editing mode)
+Execute the current cell, and move to the next cell</p>
+</li>
+<li>
+<p>s (control-s or command-s (MacOS) in editing mode)
+Save the notebook</p>
+</li>
+<li>
+<p>i i (twice i key)
+Interrupt the kernel; aborts notebook execution</p>
+</li>
+<li>
+<p>select a block, then</p>
+<div class="ulist">
+<ul>
+<li>
+<p>control-] to indent the block (command-] on MacOS)</p>
+</li>
+<li>
+<p>control-[ to dedent the block (command-[ on MacOS)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>z
+Reverse operation on cells (notebook level)</p>
+</li>
+<li>
+<p>control/command-z
+Reverse actions inside current cell</p>
+</li>
+<li>
+<p>select cells
+In edit mode, shift-click or shift-up/down arrow to select a range of cells (surrounding blue outline).
+Note that the brighter blue vertical line on the left indicates the current active (selected) cell.
+Once selected, you can copy (C), cut (X) or paste below the current selection (V) the selected cells.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_escapes_and_magic_commands">Escapes and magic commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use an exclamation mark in front of a shell command in a notebook cell to escape the (Python) interpreter and execute the corresponding shell command.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>!pwd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>yields the current directory.</p>
+</div>
+<div class="paragraph">
+<p>Several shell commands don&#8217;t even need this escape, including the above one: <code>pwd</code>, <code>ls</code>, <code>cd</code> (with or without arguments) work directly in a notebook shell.
+These are built into the Jupyter notebook for you.</p>
+</div>
+<div class="sect2">
+<h3 id="_magic_commands">Magic commands</h3>
+<div class="paragraph">
+<p>Jupyter also provides some magic (meta) commands.
+These start with a percent sign: <code>%</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>%time</code>, <code>%timeit</code> and <code>%%time</code> are the better known ones, and most useful:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>%time</code> times the execution of the line it is on: <code>%time list(range(10000))</code>.</p>
+</li>
+<li>
+<p><code>%timeit</code> does the same, but runs the line several times, to find the fastest three runs.</p>
+</li>
+<li>
+<p><code>%%time</code> times the whole cell execution, not just a single line.
+Put this command on a single line by itself at the top of the cell.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>%env</code> sets environment variables, which makes it a bit easier than using <code>os.environ</code>.
+For example, <code>%env OMP_NUM_THREADS=4</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>%run</code> executes a Python script, or even another notebook, while still remaining inside the current notebook cell.
+For example, <code>%run ./myscript.py</code> or <code>%run ./somenotebook.ipynb</code>.
+Once run, you are then able to use variables and their values from that script or notebook in your current notebook.</p>
+</div>
+<div class="paragraph">
+<p><code>%store</code> allows one to store a variable, and use it in another notebook:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>a = numpy.random.randint(1, 100, 10000)   # array of 10000 random integers between 1 and 100
+%store a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In another notebook, use the <code>-r</code> (retrieve) flag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>%store -r a
+a
+array([89, 36, 66, ..., 58, 68, 59])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Most other magic commands are simply a variant of shell commands; you can see the full list with <code>%lsmagic</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-05-01 14:54:17 +0200
+</div>
+</div>
+</body>
+</html>

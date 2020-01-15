@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Tutorial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_logging_in">Logging in</a>
+<ul class="sectlevel2">
+<li><a href="#_ssh_login">ssh login</a></li>
+</ul>
+</li>
+<li><a href="#_basic_usage_of_a_notebook">Basic usage of a notebook</a>
+<ul class="sectlevel2">
+<li><a href="#_output">Output</a></li>
+<li><a href="#_cell_type">Cell type</a></li>
+</ul>
+</li>
+<li><a href="#_executing_and_editing_an_existing_notebook">Executing and editing an existing notebook</a></li>
+<li><a href="#_caveats">Caveats</a></li>
+<li><a href="#_terminal_interface">Terminal interface</a></li>
+<li><a href="#_kernels_and_server">Kernels and server</a></li>
+<li><a href="#_extra_packages">Extra packages</a>
+<ul class="sectlevel2">
+<li><a href="#_conda">Conda</a></li>
+</ul>
+</li>
+<li><a href="#_using_a_jupyter_notebook_on_your_local_machine">Using a Jupyter notebook on your local machine</a></li>
+<li><a href="#_further_reading">Further reading</a>
+<ul class="sectlevel2">
+<li><a href="#_tutorials_introductions">Tutorials &amp; introductions</a></li>
+<li><a href="#_references">References</a></li>
+<li><a href="#_tips_and_tricks">Tips and tricks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This introduction aims to show basic usage of a Jupyter notebook, with some details geared towards users inside the EUCP project.
+For more details on Jupyter notebooks and usage, there are lots of resources on the internet for further reading.</p>
+</div>
+<div class="paragraph">
+<p>This particular introduction will not show any actual code examples: it keeps it more general, and tries to point out how the Jupyter Hub interface works, and what some things are to be aware of.
+There will be pointers near the end to actual code examples.
+The latter, though, have more to do with how to perform some specific analysis in a specific language (Python, mostly), than how to work with a Jupyter Hub.</p>
+</div>
+<div class="paragraph">
+<p>Note that you can get more (and possibly better) documentation from the help menu inside the notebook: "Help &#8594; JupyterLab Reference".</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logging_in"><a class="link" href="#_logging_in">Logging in</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You should have a login with a password; the NLeSC should be able to provide you with one.
+You can then log in to the notebook interface at <a href="https://server.eucp-nlesc.surf-hosted.nl" class="bare">https://server.eucp-nlesc.surf-hosted.nl</a> .</p>
+</div>
+<div class="paragraph">
+<p>Once logged in, you&#8217;re inside the Jupyter lab environment: from here, you can start a notebook from the launcher in the right pane, an editor or even a terminal (running in your browser, but fully functional).</p>
+</div>
+<div class="paragraph">
+<p>The picture below is annotated to indicate some essential parts of the interface, which will be referred to elsewhere in this documentation. See also <a href="https://jupyterlab.readthedocs.io/en/stable/user/interface.html" class="bare">https://jupyterlab.readthedocs.io/en/stable/user/interface.html</a> for a more detailed overview.</p>
+</div>
+<div id="jupyterlab-interface" class="imageblock">
+<div class="content">
+<img src="jupyterlab-interface.png" alt="Main Jupyter Lab interface" width="800" height="600">
+</div>
+<div class="title">Figure 1. The main Jupyter Lab interface</div>
+</div>
+<div class="paragraph">
+<p>The launcher is your main starting point; click the plus symbol in the file browser  toolbar to open it if you don&#8217;t see it.
+From the launcher, you can open an empty notebook, a "console", a terminal (opens in your home directory) or a plain text editor.
+The console is essentially the classic Python (or Julia, or R) command line interpreter; it is rarely useful.</p>
+</div>
+<div class="paragraph">
+<p>You can also open files directly by double clicking on their name, or with right click, "open".
+The program with which it opens will depend on the file type, that is, the extension (the "precipitation-trend.ipynb" would open with a notebook; usually, the metadata inside the file tells Jupyter whether this is a Python, Julia or R notebook).</p>
+</div>
+<div class="paragraph">
+<p>For people used to the default Jupyter notebook interface, you can reach this in two ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Pick the "Help" menu, then the "Launch Classic Notebook" item.</p>
+</li>
+<li>
+<p>Change the last bit of the URL, <code>/lab&#8230;&#8203;</code> into <code>/tree</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The latter indicates how to get back from the classic interface to the lab environment: make sure the URL ends with <code>/user/&lt;username&gt;/lab</code>.</p>
+</div>
+<div class="paragraph">
+<p>Sessions are saved across logins: if you entered something in a notebook and then log out, it will be there once you log back in. Also, if you close a notebook, you can easily reopen it from the panel on the left (provided the panel is in file browser mode: click the folder icon just below the Jupyter icon in the top left).</p>
+</div>
+<div class="paragraph">
+<p>To properly log out, don&#8217;t simply close the browser tab: select the Hub &#8594; Logout menu item in the Lab environment. This will prevent other people (mis)using your Jupyter session.</p>
+</div>
+<div class="sect2">
+<h3 id="_ssh_login"><a class="link" href="#_ssh_login">ssh login</a></h3>
+<div class="paragraph">
+<p>For those who prefer ssh login, this is also possible: use the standard port 22 login to the same server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ssh &lt;username&gt;@server.eucp-nlesc.surf-hosted.nl</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And of course, you can use ssh keys as well.</p>
+</div>
+<div class="paragraph">
+<p>For convenience, the <code>screen</code> and <code>tmux</code> terminal emulators are installed.</p>
+</div>
+<div class="paragraph">
+<p>Limited packages are available when using the ssh access; the normal JupyterHub login should be used for that.
+Note that several goals for which you may want to use <code>ssh</code>, can also be achieved using the terminal application in the Jupyter Lab environment, including running long-running programs.
+See below for more information on the latter.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_usage_of_a_notebook"><a class="link" href="#_basic_usage_of_a_notebook">Basic usage of a notebook</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Jupyter notebook gives you the ability of executing code in steps, iterating on a single several times. Graphs can also be drawn in the notebook, and the iteration aspect makes it possible to tweak the graph quickly and easily.
+Even fuller interaction exists for some types of graphs, see other tutorials.</p>
+</div>
+<div class="paragraph">
+<p>The individual steps in a notebook are called "cells".
+You type one or more lines of (Python) code into a cell, and executes the cell, by either clicking the "run" triangle at the top of the notebook, or using the "shift-enter" keyboard shortcut.</p>
+</div>
+<div class="paragraph">
+<p>The currently active cell is highlighted by a (blue) thick line to its left, and surrounded by a (blue) line when it is ready for input.
+Arrow keys can walk up and down previous and next cells, or select a cell with the pointer.</p>
+</div>
+<div class="paragraph">
+<p>Note that the notebook has essentially two modes: one where commands (or text) can be inserted, called "edit mode", and a mode where extra commands can be issued, called "command mode".
+A highlighted cell (and blinking cursor) indicates edit mode, while an active but greyed-out cell indicates command mode.
+Use enter to get into edit mode, and use escape to get into command mode.</p>
+</div>
+<div class="paragraph">
+<p>Most commands work both in edit and command mode, such as running a cell using shift-enter.
+Some keyboard shortcuts, such as "d d" (which deleted the selected cell(s)), only work in command mode.
+If you are using the mouse and menu items, you&#8217;ll find there is not much difference between the two modes.
+Note that you can select multiple cells and apply commands such as the aforementioned "d d" (menu item: Edit - Delete Cells) command.</p>
+</div>
+<div class="paragraph">
+<p>Type in some simple code, then see the effect when you run a cell.
+To save your work, use "File &#8594; Save Notebook" or simply control-s / command-s (depending on your OS &amp; browser combination).
+You may want to rename the notebook from the standard "Untitled.ipynb": right-click on the tab of the relevant notebook and pick the first item: "Rename Notebook&#8230;&#8203;".
+Or use "File &#8594; Save Notebook As&#8230;&#8203;" / shift-control-s / shift-command-s.</p>
+</div>
+<div class="sect2">
+<h3 id="_output"><a class="link" href="#_output">Output</a></h3>
+<div class="paragraph">
+<p>The output from each cell is whatever the last line returns.
+There is no print function needed, but if you want output from earlier lines in the cell, you will need to use <code>print()</code> or something similar (such as logging functions).
+You can avoid output by assigning to a variable (the underscore variable can be useful here), or appending a semi-colon, <code>;</code>, at the end of the last line.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cell_type"><a class="link" href="#_cell_type">Cell type</a></h3>
+<div class="paragraph">
+<p>Cells can be of another type than code: plain text ("raw") and Markdown are also possible.
+Select the cell type from the "Code" menu item at the top of the notebook.
+Note that "code" type of cells have an (empty) number holder in front of them <code>[ ]:</code>.
+Markdown is a simple mark-up language, and it is useful if you want to provide a bit more layout (lists, tables, headings, indented text) than you can achieve with raw text.
+You&#8217;ll need to "run" a Markdown cell to actually render it into HTML.
+If you select to edit a Markdown cell, it will automatically revert to Markdown (from HTML) until you rerun it, after which it will show rendered HTML again.</p>
+</div>
+<div class="paragraph">
+<p>The code type is always that of the chosen kernel. You can change the kernel of a notebook, although this will be of limited use (it was useful for transitioning Python 2 to Python 3 code).
+There are ways of running, for example, an R code block in a few cells inside a Jupyter Python (3) notebook.
+For reproducibility and convenience of other users, however, we don&#8217;t recommend this.</p>
+</div>
+<div class="paragraph">
+<p>You can thus switch your cell type between code and Markdown, providing text between your code that is more readable than standard Python comments.
+This is, for example, widely used for teaching purposes.
+It is generally used to explain steps in the next cell(s) better than a set of comments.
+All data (variables, function definitions etc) are saved between cells, not hampering execution.</p>
+</div>
+<div class="paragraph">
+<p>A nice example of this is the online Python Data Science Handbook by Jake Vanderplas: a few dozen notebooks are listed at <a href="https://github.com/jakevdp/PythonDataScienceHandbook/tree/master/notebooks" class="bare">https://github.com/jakevdp/PythonDataScienceHandbook/tree/master/notebooks</a> .
+Conveniently, GitHub can render Jupyter notebooks: when selecting a notebook on GitHub, GitHub will attempt to render it with Markdown-to-HTML formatting and figures (though some larger notebooks will fail to render).
+Note that figures are saved <strong>with</strong> the notebook: there is no actual execution of the code in a rendered notebook, just the notebook as last saved by the creator.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_executing_and_editing_an_existing_notebook"><a class="link" href="#_executing_and_editing_an_existing_notebook">Executing and editing an existing notebook</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Other than creating your own notebook, you can also grab a notebook from a colleague, and run it yourself.
+Very similar to running a script, but this time, you can easily stop halfway, edit some lines of code, then execute the rest with your changes.</p>
+</div>
+<div class="paragraph">
+<p>As an example, you could download one of the aforementioned data science handbook example notebooks.
+Pick one you like (e.g., the K-means tutorial, notebook 05.11; it may take a few tries for GitHub to render it)<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>.
+Select the "Download" or "Raw" option near the top on the GitHub page, which will likely render the raw notebook contents in your web browser (a JSON file).
+Save this raw page somewhere on your local machine (preferably keep the extension to be <code>.ipynb</code>), then in the Jupyter lab on the server, in the file browser (left pane, the folder icon), select "Upload Files" (line with up-arrow above it).
+Once the notebook is uploaded, Jupyter Lab will recognise it by its extension as a Jupyter notebook, and either double-clicking or right-click &#8594; Open should start a new notebook with all the content already in it, including the graphics.
+(There is, as far as a I know, not yet a way to open a remote notebook directly from a Jupyter Lab, by giving it the URL of the file or the URL of the GitHub repository item: you&#8217;ll have to download and upload it yourself.)</p>
+</div>
+<div class="paragraph">
+<p>You can now execute the cells top-down one by one (shift-enter nicely steps through each cell), which will recreate the graphs; and edit cells in the notebook as you see fit.
+In the main menu, there are various other options under the "Run" item to run a notebook.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_caveats"><a class="link" href="#_caveats">Caveats</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are a few caveats to be aware of when using a Jupyter notebook;</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Notebooks are not idempotent</dt>
+<dd>
+<p>In other words, executing a notebook cell over and over again will not always yield the same result.
+The following example shows:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>[4]: a = 5
+-----------
+[5]: a += 1
+-----------
+[ ]: a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Depending on how often you execute cell #5, the last cell will show 6, 7, 8 or an even higher number.
+You could even execute a dozen cells in order, then go back to a cell like #5 here, execute it once, then hop forward all the way to where you were before (skipping all cells in between), and get different results, because you increased <code>a</code> 's value by 1.
+It is, therefore, often good before sending a notebook to someone else, or publishing it in some other way, to ensure everything works as expected.
+The menu item "Run &#8594; Restart Kernel and Run All Cells&#8230;&#8203;" is a good option for this.</p>
+</div>
+</dd>
+<dt class="hdlist1">Insignificant changes in the notebook file hamper version control</dt>
+<dd>
+<p>Each code cell has a counter next to it (the counter serves, among others, as a history item).
+Since this counter changes every time you execute a cell, <strong>and</strong> the counter is saved in the notebook file, the actual file on disk changes, even if the code nor output have changed (execution date information may also be saved and will change every time).
+This is annoying when using versioning software such as git, which will show this as a difference.
+Again, the menu item "Run &#8594; Restart Kernel and Run All Cells&#8230;&#8203;" can help here, resetting all the counters.
+There are also a few little scripts that clean up the notebook files on disk, that you can run before using git.
+Be aware that some scripts also strip the <strong>output</strong> from the notebooks.
+This may be fine, but when such notebooks are saved on GitHub, they will be rendered with just the input: no output or graphs will be visible.</p>
+<div class="paragraph">
+<p>One tool is <a href="https://github.com/kynan/nbstripout">nbstripout</a>; you can use it as <code>nbstripout --keep-output</code> to keep the output, but remove the counters, before adding and committing this to git or your favourite versioning tool.</p>
+</div>
+</dd>
+<dt class="hdlist1">Output may get lost</dt>
+<dd>
+<p>When closing and then re-opening a notebook, or when logging out and logging back in again, calculations will still proceed in the background (as long as the server is running).
+But their output may not be visible anymore: the kernel has lost the connection to the displaying cell.
+Always assign important output to a variable, so you can retrieve it later.
+This prevents losing results when e.g. accidentally closing a browser tab.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_terminal_interface"><a class="link" href="#_terminal_interface">Terminal interface</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Terminal interface is very much like a normal terminal.
+You can walk around the file system, execute programs and open up a text editor (even if there is a standard text editor shipped with Jupyter Lab).</p>
+</div>
+<div class="paragraph">
+<p>You can also compile and run programs directly from the terminal.
+For longer running programs, it may be useful to redirect the normal output (<code>stdout</code>) and errors (<code>stderr</code>) to a file, and disconnect the program from the terminal, so it will continue to run.
+The following is one easy way to do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>$ ./start-long-running-program &gt;&amp; output.txt &amp;
+$ disown %1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>ps -ax</code> will still show the program, but it will not be connected to the Terminal app.</p>
+</div>
+<div class="paragraph">
+<p>Be aware that in the above example, both standard output and standard error are sent to the same file.
+To keep them separate, use e.g.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>$ ./start-long-running-program &gt; output.txt 2&gt; error.txt &amp;
+$ disown %1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that these examples use <code>disown</code>.
+The <code>nohup</code> command is an alternative, used in front of the long running command.
+<code>nohup</code> will automatically redirect output to a file called <code>nohup.out</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kernels_and_server"><a class="link" href="#_kernels_and_server">Kernels and server</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <strong>Kernel</strong> refers to the underlying program executing your commands, such as Python, or perhaps R or Julia.
+There are a few interesting options under the "Kernel" menu item.
+Perhaps the most important one is "Interrupt Kernel" ("i i" keyboard shortcut in command mode): if you realise the cell you are currently executing takes too long, this will stop the cell and kernel.</p>
+</div>
+<div class="paragraph">
+<p>The "Restart Kernel and Clear All Outputs&#8230;&#8203;" is a good way to start a notebook completely from scratch.
+It will not execute the notebook, but will remove all variable values kept in memory, but <strong>only</strong> for the current notebook.
+Or, as mentioned in the <a href="#_caveats">Caveats</a> section, use "Run &#8594; Restart Kernel and Run All Cells&#8230;&#8203;".</p>
+</div>
+<div class="paragraph">
+<p>If you want a <strong>complete</strong> restart, you can restart the server: "Hub &#8594; Control Panel", then "Stop My Server", then "Start My Server".
+This will not clear the notebooks, nor log you out, but it will completely restart the underlying server that takes care of running all the kernels.
+This is nearly the definition of "Server" here: it is the part that provides the web interface and runs the kernels.
+It is called <strong>your</strong> server, since it runs under your account, and restarting it does not hamper other users.
+There is a more general server that is used by everyone, which is what you see at the login page.</p>
+</div>
+<div class="paragraph">
+<p>This gives some insight how a Jupyter Hub works and is subdivided: main server &#8594; user servers &#8594; kernels.
+This can be useful to keep in mind when something breaks or hangs: you may not need to restart everything.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extra_packages"><a class="link" href="#_extra_packages">Extra packages</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The notebook environment is set up with most Python packages and utilities available.
+If, however, you have need a straightforward package that isn&#8217;t installed, you can install it locally yourself:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open a Terminal</p>
+</li>
+<li>
+<p><code>pip install &lt;mypackage&gt; --user</code></p>
+</li>
+<li>
+<p>Start a new notebook</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>--user</code> option is necessary, since otherwise <code>pip</code> will attempt to install the package system wide, and you won&#8217;t have access to do that.
+You will also have to start a new notebook, to let the Python kernel pick up the newly installed package.</p>
+</div>
+<div class="paragraph">
+<p>You can even avoid opening the Terminal, and use the shell escape with pip from within a notebook cell: <code>!pip install &lt;mypackage&gt; --user</code>.
+You will still have to start a new notebook though.</p>
+</div>
+<div class="sect2">
+<h3 id="_conda"><a class="link" href="#_conda">Conda</a></h3>
+<div class="paragraph">
+<p>If you are familiar with conda, you can use this to install even more packages, including C or Fortran libraries.
+Conda can be found at <code>/usr/local/miniconda/bin/conda</code>, and should be on your <code>$PATH</code>.
+Use the Terminal to create a new environment and install the necessary packages.</p>
+</div>
+<div class="paragraph">
+<p>For example, in the Terminal</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>conda create --name myenv --channel conda-forge python=3.7 astropy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>in case you want to run some astronomical analysis.</p>
+</div>
+<div class="paragraph">
+<p>The above also uses the conda-forge channel, which houses a lot of useful (scientific) packages.</p>
+</div>
+<div class="paragraph">
+<p>Conda creates a new "environment", which is not read by a (new) notebook, unfortunately.
+Therefore, at the moment, you can only use this for running scripts in the Terminal.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_a_jupyter_notebook_on_your_local_machine"><a class="link" href="#_using_a_jupyter_notebook_on_your_local_machine">Using a Jupyter notebook on your local machine</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you have gotten the hang of notebooks, and you like them, you may also want to try and use them on your local machine.
+This can be as simple as</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>python3 -m pip install jupyter</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and then</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>python3 -m jupyter notebook</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(I use the <code>python3 -m &lt;package&gt;</code> idiom: this guarantees the corresponding package-executable belongs to this Python version, and not, for example, Python 2.
+For example, <code>pip</code> generally refers to Python 2, and <code>pip3</code> to Python 3, but this is not guaranteed.)</p>
+</div>
+<div class="paragraph">
+<p>The last command will open a tab in your default browser with a (classic) notebook on your localhost.</p>
+</div>
+<div class="paragraph">
+<p>If you want a Jupyter Lab environment, install it and run it</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>python3 -m pip install jupyterlab
+python3 -m jupyter lab</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some details can also be found at <a href="https://jupyter.readthedocs.io/en/latest/content-quickstart.html" class="bare">https://jupyter.readthedocs.io/en/latest/content-quickstart.html</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_reading"><a class="link" href="#_further_reading">Further reading</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_tutorials_introductions"><a class="link" href="#_tutorials_introductions">Tutorials &amp; introductions</a></h3>
+<div class="paragraph">
+<p>Note about tutorials and introduction: there is a lot of information on the internet, but lots of that is spent instructing the reader how to install Jupyter (Lab or other).
+With a server already available, you can obviously skip those parts, and dive straight into code examples.
+If you want to run a Jupyter(Lab) environment on your own machine, the first half of such material may also be of use, but see also the <a href="#_using_a_jupyter_notebook_on_your_local_machine">previous section</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.codecademy.com/articles/how-to-use-jupyter-notebooks" class="bare">https://www.codecademy.com/articles/how-to-use-jupyter-notebooks</a></p>
+</li>
+<li>
+<p><a href="https://www.dataquest.io/blog/jupyter-notebook-tutorial/" class="bare">https://www.dataquest.io/blog/jupyter-notebook-tutorial/</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_references"><a class="link" href="#_references">References</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://jupyterlab.readthedocs.io/en/stable/" class="bare">https://jupyterlab.readthedocs.io/en/stable/</a></p>
+</li>
+<li>
+<p><a href="https://jupyter.org/documentation" class="bare">https://jupyter.org/documentation</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tips_and_tricks"><a class="link" href="#_tips_and_tricks">Tips and tricks</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.dataquest.io/blog/jupyter-notebook-tips-tricks-shortcuts/" class="bare">https://www.dataquest.io/blog/jupyter-notebook-tips-tricks-shortcuts/</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. it is an unfortunate effect of the rapid development in some Python packages, that several of the machine learning examples here already suffer from backwards incompatibility: some modules used have been removed, replaced or renamed, and as a result, some of these notebooks will not execute properly
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-14 17:18:01 +0200
+</div>
+</div>
+</body>
+</html>

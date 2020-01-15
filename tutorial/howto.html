@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>How-to&#8217;s, why&#8217;s and general tips</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_how_do_i_run_python_2">How do I run Python 2?</a></li>
+<li><a href="#_how_do_i_make_sure_my_notebook_is_executable_by_others">How do I make sure my notebook is executable by others?</a></li>
+<li><a href="#_how_do_i_automatically_re_import_a_module">How do I automatically re-import a module?</a></li>
+<li><a href="#_what_is_the_ssh_access_useful_for">What is the ssh access useful for</a></li>
+<li><a href="#_there_are_packages_and_software_missing_when_i_use_ssh">There are packages and software missing when I use ssh</a></li>
+<li><a href="#_what_is_restart_my_server">What is "restart my server"?</a></li>
+<li><a href="#_how_do_i_run_long_running_processes">How do I run long-running processes?</a>
+<ul class="sectlevel2">
+<li><a href="#_in_a_notebook_cell">In a notebook cell</a></li>
+<li><a href="#_in_a_standalone_script">In a standalone script</a></li>
+</ul>
+</li>
+<li><a href="#_can_i_run_a_jupyter_lab_with_the_same_software_installed_locally_on_my_machine">Can I run a Jupyter Lab with the same software installed locally on my machine?</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_how_do_i_run_python_2">How do I run Python 2?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Python 2 is not supported by the standard datascience notebook anymore, and we have followed suit.
+Python 2 will be abandoned bye 1 January 2020, and lots of packages have already abandoned it in their newer versions.
+Therefore, Python code should be Python 3 by default now.</p>
+</div>
+<div class="paragraph">
+<p>Of course, not having a Python 2 kernel available, makes it harder to transition your old code from Python 2 to Python 3.
+In that case, contact the maintainers of this EUCP service, and we&#8217;ll try and help you transition your code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_do_i_make_sure_my_notebook_is_executable_by_others">How do I make sure my notebook is executable by others?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Usually, problems arise because notebook cells have been executed out of order, or multiple times (notebooks are not idempotent).
+When you have done this, and then send the notebook to another person, they can&#8217;t replicate your results.</p>
+</div>
+<div class="paragraph">
+<p>To make sure your notebook can be run top-down with proper results, you should opt to <code>Restart Kernel&#8230;&#8203;</code> (right-click on a cell, or from the "Kernel" item in the menu, or use the keyboard shortcut "0, 0" (two zeroes)).
+The pop-up warns you that "all variables will be lost", which is generally what you want: all variables will be reset/</p>
+</div>
+<div class="paragraph">
+<p>Even easier may be the bottom option from the "Run" item in the menu: "Restart Kernel and Run All Cells".</p>
+</div>
+<div class="paragraph">
+<p>Finally, there is the <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-reset">magic command <code>%reset</code></a> to clear all variables (when used without a variable name), and <code>%reset -f</code> to do so without confirmation. Putting this magic command at the top of the first notebook cell could be good practice (or perhaps even in a cell on its own, that is only run when you run all cells in order).</p>
+</div>
+<div class="paragraph">
+<p>Note that the <code>%reset</code> command does not reset or reload your imports.
+If you are developing a module or package that is imported into your notebook, you may want to restart the full kernel for changes to take effect.
+But see also the next how-to.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_do_i_automatically_re_import_a_module">How do I automatically re-import a module?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are developing a module or package and you import it into your notebook, changes in the module or package are not automatically effective: the module is not automatically re-imported.
+You could restart the kernel (which will lose all variable values as well), but that is perhaps not ideal.
+The <code>autoreload</code> extension can take care of this.</p>
+</div>
+<div class="paragraph">
+<p>First, load the extension: <code>%load_ext autoreload</code>.
+Then, use the <code>%autoreload</code> with an appropriate setting: <code>%autoreload 2</code>.</p>
+</div>
+<div class="paragraph">
+<p>Keep in mind that autoreload is not guaranteed to work.
+For details, see the <a href="https://ipython.readthedocs.io/en/stable/config/extensions/autoreload.html">autoreload</a> documentation.</p>
+</div>
+<div class="paragraph">
+<p>I get a "Please use a different workspace" pop-up</p>
+</div>
+<div class="paragraph">
+<p>This happens when you have a Jupyter Lab session already open in another tab (in the same browser).
+You should either switch to that other tab, close that other tab, use a different browser, or enter a unique identifier if you really want a new workspace.</p>
+</div>
+<div class="paragraph">
+<p>How do I change my password?</p>
+</div>
+<div class="paragraph">
+<p>For now, you&#8217;ll have to use ssh and access the virtual machine running the JupyterHub.
+JupyterHub itself does not manage accounts and passwords; it checks with other services whether a login is valid</p>
+</div>
+<div class="paragraph">
+<p>ssh to the machine with your current login name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>ssh &lt;username&gt;@server.eucp-nlesc.surf-hosted.nl
+&lt;username&gt;@server.eucp-nlesc.surf-hosted.nl's password:</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, on the command line, run the <code>passwd</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>Changing password for evert.
+(current) UNIX password:
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Logout with control-d, or type <code>exit</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_the_ssh_access_useful_for">What is the ssh access useful for</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Other than changing one&#8217;s password, ssh may be useful when one has to upload a set of files: using <code>rsync</code> or <code>scp</code> may be easier than tarring the files, uploading them into the notebook, then untarring them in the notebook terminal.
+Other than that, there are likely few other uses for ssh.
+Perhaps if you prefer using tmux or GNU screen (instead of redirecting output to a file for long running processes), you may prefer ssh access (both tmux and screen are installed); but the amount of software that can be used is limited via ssh.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_there_are_packages_and_software_missing_when_i_use_ssh">There are packages and software missing when I use ssh</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is on purpose.
+While we would like to have every type of workflow available, resources are limited.
+We have therefore chosen to use a standard Docker container (the datascience notebook) with some additional packages.
+The container is used when logging in through the Hub.
+We don&#8217;t install a copy of all the container software also on the underlying virtual machine: the latter is mainly used for running the services, not for directly running analyses on it.</p>
+</div>
+<div class="paragraph">
+<p>If you have specific requests, we may be able to accommodate them; please let us know.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_restart_my_server">What is "restart my server"?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This open can be reached from the Hub menu - control panel.
+Every user will, upon first login, obtain a separate process, the Jupyter server.
+This runs the lab and kernels.
+If you restart the server, it will restart this process, which is sometimes necessary if the process seems to be stuck.
+It does not, however, reset your complete session: both your login and the open notebooks are all saved.
+So it is similar to turning a computer off and on again, but you don&#8217;t have to log in again.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_do_i_run_long_running_processes">How do I run long-running processes?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are two answers to that, depending on whether you run a notebook cell that takes hours to days, or a standalone script.
+Most notable, though, is that the process will be keep running as long as you don&#8217;t stop the kernel, and as long as you don&#8217;t stop or restart your (Jupyter) server.
+You can log out or close the browser, and once you log back in, you&#8217;ll find the process still going (or completed properly); it will not be aborted when you log out or close the browser (tab).</p>
+</div>
+<div class="sect2">
+<h3 id="_in_a_notebook_cell">In a notebook cell</h3>
+<div class="paragraph">
+<p>An output from the notebook cell will be gone if you close the browser tab or log out.
+That is both the output from a statement on the last line of a cell (such as a single variable), or print functions.
+Therefore, <strong>always</strong> assign (important) output to a variable.
+You can then retrieve the output once the cell is finished, through that variable.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, a cell appears to be still running (indicating by the <code>[*]</code> in front of the cell), while it should have finished.
+Create a new cell below it, print or list the variables of interest from the previous cell, and execute the new cell (or simply execute the next cell).
+If the running cell was indeed finished, the new cell should execute properly, and you&#8217;ll find your output there.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_in_a_standalone_script">In a standalone script</h3>
+<div class="paragraph">
+<p>Similar to a notebook cell, the best is to capture all important data into (a) variable(s); the extra operation is then to save those variables to disk (ASCII, HDF5, netCDF, whatever format).</p>
+</div>
+<div class="paragraph">
+<p>If you have plain (print) output, or except error message, you can simply redirect those:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>./myscript.py &gt; output.txt 2&gt; errors.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or if you don&#8217;t mind everything going into one file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>./myscript.py &gt; output.txt 2&gt;&amp;1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(This redirects the errors from <code>stderr</code> to where-ever the normal output, <code>stdout</code>, is going, which happens to be going into the file <code>output.txt</code>.)</p>
+</div>
+<div class="paragraph">
+<p>You will want put the script in the background, and <strong>disconnect it from the terminal</strong>:
+Use control-z to background the script, type <code>bg</code> to put it in the background, then type <code>jobs</code> to see it is running in the background, take note of the number (which is <strong>not</strong> the PID), and disconnect it from the terminal: <code>disown %1</code> (or <code>disown %2</code> if it is the second processes, etc).
+You can of course immediately background the process with the <code>&amp;</code>, in which case a full example looks something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>$ sleep 120 &gt; output.log 2&gt;&amp;1 &amp;
+$ jobs
+[1]  + running    sleep 120
+$ disown %1
+$ jobs
+&lt;no output&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_can_i_run_a_jupyter_lab_with_the_same_software_installed_locally_on_my_machine">Can I run a Jupyter Lab with the same software installed locally on my machine?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Yes.</p>
+</div>
+<div class="paragraph">
+<p>You could install all the packages yourself, including JupyterLab, using a combination of your package manager, Conda en pip.</p>
+</div>
+<div class="paragraph">
+<p>It is easier if you can install and use Docker.
+Check how to install it for your system.
+(Note: Docker, under the hood, requires admin/root access; this may prevent installation or usage on some systems.)</p>
+</div>
+<div class="paragraph">
+<p>Once you have Docker up and running, obtain the Docker image for the EUCP JupyterHub. Currently (August 2019), this is</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>docker pull evertrol/eucp-notebook:08eb66f14951</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(You don&#8217;t even need to do this explicitly, since the command below will retrieve the image if it&#8217;s not already downloaded.)</p>
+</div>
+<div class="paragraph">
+<p>Once this is downloaded (8.6 GB), you can run it, with an internal port inside the Docker container pointing to one on your system:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>docker run  -p 8888:8888 evertrol/eucp-notebook:08eb66f14951</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Give it a few seconds to get started, then notice the line</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>    To access the notebook, open this file in a browser:
+        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-6-open.html
+    Or copy and paste one of these URLs:
+        http://(08cd706d98b3 or 127.0.0.1):8888/?token=0a26b4d7ec6cd5febf62ea00ab761f3350a14700ac09f017</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The second line will not work, since this is internal to the Docker container; the same goes for the first part between parentheses.
+In this case, you&#8217;ll want to go to <code><a href="http://127.0.0.1:8888/?token=0a26b4d7ec6cd5febf62ea00ab761f3350a14700ac09f017" class="bare">http://127.0.0.1:8888/?token=0a26b4d7ec6cd5febf62ea00ab761f3350a14700ac09f017</a></code> (the <code>8888</code> here is the first <code>8888</code> in the <code>run -p 8888:8888</code> command above, so change it if you picked a different port).</p>
+</div>
+<div class="paragraph">
+<p>This should show a Jupyter notebook, but not yet a lab environment.
+Both have identical functionality otherwise (e.g., the Jupyter notebook also has a terminal app); if you want to switch to the lab environment, change the <code>/tree</code> part in the resulting URL to <code>/lab</code>.</p>
+</div>
+<div class="paragraph">
+<p>Since this all runs inside a Docker container, and only connects to your machine via this TCP port, you&#8217;ll need to mount some volumes to access directories on your system.
+Quit the current running container (control-C); you can also close the current Jupyter session, since a next run, the token will be different, and this session is forgotten.</p>
+</div>
+<div class="paragraph">
+<p>Now, run the Docker container with, for example, the following volumes mounted:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>docker run  -p 8888:8888 -v $HOME/:/home/jovyan/home/ -v $HOME/data/:/home/jovyan/data/ evertrol/eucp-notebook:08eb66f14951</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will show two directories (next to the default <code>work</code> directory) in the notebook, that point directly to your home directory and a <code>data</code> subdirectory.
+(<code>jovyan</code> is the default user in a Jupyter-based Docker container).</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-23 16:52:02 +0200
+</div>
+</div>
+</body>
+</html>

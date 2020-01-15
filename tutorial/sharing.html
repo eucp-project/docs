@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<title>Sharing notebooks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" id="bootstrap-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="bootstrap-theme-css" href="https://www.eucp-project.eu/wp-content/themes/tentered/css/bootstrap-theme.css?ver=1.0" type="text/css" media="all">
+<link rel="stylesheet" id="ecup-extra-css" href="https://lab.eucp-project.eu/hub/static/css/eucp.css" type="text/css" media="all">
+
+</head>
+<body class="article">
+<div id="header">
+<div class="content menu">
+<a href="https://lab.eucp-project.eu/help">help</a> | <a href="https://eucp-project.eu/">main site</a> | <a href="https://www.eucp-project.eu/the-eucp-wiki/">eucp - wiki</a>
+</div>
+</div>
+<a href="https://eucp-project.eu"><img class="logo" src="https://lab.eucp-project.eu/hub/logo" alt="EUCP home" title="EUCP home"></a>
+
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is no service implemented to easily share notebooks, either between EUCP users or with the outside world.
+This may happen in the future, but for now, users will have to make their own arrangements.
+It can, however, be straightforward to arrange this yourself.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_internally">Internally</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Users are grouped by institutions, and their *nix permissions follow this.
+This means that people from the same institute can peek at each other codes (through ssh or the Lab terminal), but not further out.
+You can see your group by starting the Lab terminal and typing <code>groups</code> (all commands below should be executed in the terminal).
+This should lists all the groups your account belongs to, with the first group being the main group.
+Alternatively, type <code>ls -la</code> and you&#8217;ll get an overview of the files in your directory, together with their permission, owners and group owners.
+Files will be owned by your account, except for the parent directory (<code>..</code>), which is owned by root.
+You&#8217;ll see that the permissions are generally <code>-rw-r-----</code> (directories have an additional <code>x</code>).
+This means these files are read- and writeable by you, and only readable by your group.
+Others (that is, outside your group), can&#8217;t read or write anything.</p>
+</div>
+<div class="paragraph">
+<p>If you want to make a file readable for others (but still internal on the EUCP server), add read permission to the file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>chmod o+r myfile.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This adds read (<code>r</code>) permission to others (<code>o</code>).
+Similarly, prevent fellow group users from reading your files, remove the group read permission:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>chmod g-r myfile.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first case, you will also need to make your home directory readable for other users:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>chmod o+rx .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The single dot <code>.</code> indicates your current (home) directory, and directories also need to be executable (<code>x</code>) to be able to view them.</p>
+</div>
+<div class="paragraph">
+<p>To actually access other people&#8217;s directories, use the special <code>_users</code> directory.
+Don&#8217;t remove this <code>_users</code> (nor the <code>_data</code>) special directory (you actually can&#8217;t)!
+It exists, because if you would change to the parent directory from your home directory, you&#8217;ll be stuck in your Jupyter container.
+There is only one user in that container (plus a default Jupyter user, <code>jovyan</code>), and you will not see the other users.
+The <code>_users</code> directory corresponds to the actual base directory of the underlying virtual machine, and let&#8217;s you connect to other user&#8217;s directories.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, the <code>_data</code> directory leads directly to the data volume that has all the datasets.
+Both these special directories are mounted read-only into the container.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_externally">Externally</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For external sharing, either publicly or privately among a small set of collaborators, a service like GitHub or GitLab may be useful.
+Both allow one to set up a private repository for free, and then let collaborators access them.
+GitHub has a limit on the number of collaborators for a free private repository, GitLab does not.
+Below is a suggested workflow for sharing with a set of people, using GitLab.</p>
+</div>
+<div class="paragraph">
+<p>Two bonus conveniences of using GitHub or GitLab:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>both render notebooks automatically.
+If you include the output in the notebook, they will show the rendered notebook with output.
+Note that GitHub and GitLab don&#8217;t run the actual notebook, they just the contents (except for rendering Markdown cells).</p>
+</li>
+<li>
+<p>It is easy to open up a private repository to the world.
+Once you&#8217;re happy with your notebook, and have perhaps published the results, it is a simple permission change to make a repository public, so that people can actually see your analysis and follow along.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note that their are multiple other ways to share documents, whether they are notebooks, scripts or texts, such as Google Drive and variants.
+The GitHub/GitLab option is highlighted, because it may introduce people unfamiliar with git and services like GitHub to them.
+While it will not always be the best option, it can, for example, be practical in case things start to expand beyond a simple notebook file, as it will keep things all in one place, and have the option to revert back to a previous working version in case mistakes were introduced.</p>
+</div>
+<div class="sect2">
+<h3 id="_sharing_notebooks_with_gitlab">Sharing notebooks with GitLab</h3>
+<div class="paragraph">
+<p>This assumes you have an account for GitLab; GitLab allows people to (also) register an account with their Google, Twitter, Bitbucket of GitHub(!) account, if you don&#8217;t want to yet make a new account.</p>
+</div>
+<div class="paragraph">
+<p>Once signed in, create a new repository (green button top right).
+Give it a logical and practical name, and check the other settings (by default, it should be set up to be a private project, which is likely what you want). Check the "Initialize repository with a README" box, and click "Create project".</p>
+</div>
+<div class="paragraph">
+<p>The next page shows the new project&#8217;s repository.
+If you want to edit the readme file, click it and you have the option to edit it (button in the center of the menu to the right).
+If you do that, don&#8217;t forget to click the green "Commit changes" button at the bottom of the text editor.</p>
+</div>
+<div class="paragraph">
+<p>You can navigate back to the main repository page near the top, where there&#8217;ll be a breadcrumb navigation indicating &lt;your account&gt; &#8594; &lt;your project&gt; &#8594; repository.
+Click the project name: the README should be rendered automatically near the bottom of the page.</p>
+</div>
+<div class="paragraph">
+<p>Somewhere a few lines below the top, you should find a line like <code>[master] &lt;project&gt; / +v</code> (GitLab has a somewhat overhelming interface).
+Click the dropdown <code>+</code> button, and select "upload file".
+This is where you can upload your notebook file.
+Keep in mind that this is uploaded from your local machine, so you may have to download the file from the JupyterHub first.
+We may try and improve this workflow in the future.</p>
+</div>
+<div class="paragraph">
+<p>Once uploaded, give it some time, and if all worked well, GitLab should automatically render a preview of your notebook, for ease of viewing.</p>
+</div>
+<div class="paragraph">
+<p>You&#8217;re done: you have your notebook in a private repository on GitLab.
+Now to share it with selected people.</p>
+</div>
+<div class="sect3">
+<h4 id="_adding_a_collaborator">Adding a collaborator</h4>
+<div class="paragraph">
+<p>Make sure your at the page of your repository first.
+To add a collaborator, go to "settings" at the bottom in the left side bar.
+Select "members" from the menu, and search for people to invite and give access to your repository.
+Usually, this is done by typing "@" and then their GitLab user name.
+Reporter or Developer are the best roles to give (Guest is somewhat limited).</p>
+</div>
+<div class="paragraph">
+<p>Once added to the repository, people can now browse it and fork or clone it, or simply download the notebook file themselves, while it is otherwise still private to the outside world.</p>
+</div>
+<div class="paragraph">
+<p>Note that the collaborator applies to the whole repository.
+If you have another notebook that you&#8217;d like to share with a different set of people, you should create a new repository for this.
+On the other hand, if you have multiple notebooks (or other scripts, programs or texts) that you&#8217;d like to share with the same set of people, you can add them to the current repository.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2019-08-14 17:18:01 +0200
+</div>
+</div>
+</body>
+</html>
